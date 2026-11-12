@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Se non è un file reale (es. css, js, immagini)...
+RewriteCond %{REQUEST_FILENAME} !-f
+# ...e non è una cartella reale...
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# ...indirizza qualsiasi URL a index.php
+RewriteRule ^ index.php [L]
