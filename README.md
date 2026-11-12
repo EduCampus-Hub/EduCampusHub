@@ -1,9 +1,9 @@
 # Regole Repository
 
 ### Branching
-Ogni team deve creare e usare una branch nominata secondo la struttura `Team<N>...`:
-- Es: `Team1BlaBla`
-- Es: `Team2BlaBla`
+Ogni membro deve creare e usare una branch nominata secondo la struttura `cognome_TeamN`:
+- Es: `rossi_Team1`
+- Es: `bianchi_Team2`
 
 ### Gestione .gitkeep
 - Rimuovere il file `.gitkeep` da una cartella non appena vi si aggiungono classi o file.
