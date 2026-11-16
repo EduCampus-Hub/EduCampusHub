@@ -20,7 +20,14 @@ class CourseController
             try 
             {
                 $input = new CreateCourseDTO(
-
+                    maxCapacity: (int)$_POST['maxCapacity'],
+                    targetAudience: $_POST['targetAudience'],
+                    status: $_POST['status'],
+                    id: $_POST['id'],
+                    title: $_POST['title'],
+                    description: $_POST['description'],
+                    isMandatory: isset($_POST['isMandatory']) ? (bool)$_POST['isMandatory'] : false,
+                    durationInHours: (int)$_POST['durationInHours']
                 );
             } catch (InvalidArgumentException $e) 
             {
