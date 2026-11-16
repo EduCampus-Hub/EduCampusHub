@@ -1,0 +1,14 @@
+<?php 
+namespace App\Domain\Model;
+use App\Domain\Enum\TargetAudienceEnum;
+use App\Domain\Enum\CourseStatusEnum;
+
+//parametri course: i due enum, un vaslore che se messo null vuol dire che non ce una capienza massima del corso
+readonly class Course
+{
+    public function __construct(
+        public int $maxCapacity=null,
+        public TargetAudienceEnum $target,
+        public CourseStatusEnum $status
+    )
+}
