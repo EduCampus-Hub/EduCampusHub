@@ -21,7 +21,7 @@ class CourseController
             {
                 $input = new CreateCourseDTO(
 
-                )
+                );
             } catch (InvalidArgumentException $e) 
             {
                 echo "Error: " . $e->getMessage();
