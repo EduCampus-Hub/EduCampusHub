@@ -7,8 +7,8 @@ use App\Domain\Enum\CourseStatusEnum;
 readonly class Course
 {
     public function __construct(
-        public int $maxCapacity=null,
+        public int $maxCapacity,
         public TargetAudienceEnum $target,
         public CourseStatusEnum $status
-    )
+    ) {}
 }
