@@ -9,6 +9,11 @@ readonly class Course
     public function __construct(
         public int $maxCapacity,
         public TargetAudienceEnum $target,
-        public CourseStatusEnum $status
+        public CourseStatusEnum $status,
+        public string $id, 
+        public string $title,
+        public string $description,
+        public bool $isMandatory,
+        public int $durationInHours
     ) {}
 }
