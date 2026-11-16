@@ -29,9 +29,7 @@ class  CreateCourseUseCase
             throw new InvalidArgumentException('Max capacity and duration must be greater than zero.');
         }
 
-        $existingCourse = $this->courseRepository->findAll();
-
-        $newCourse = new Course::create(
+        $newCourse = Course::create(
             title: $input->title,
             description: $input->description,
             target: $input->target,
@@ -40,8 +38,7 @@ class  CreateCourseUseCase
             durationInHours: $input->durationInHours,
             maxCapacity: $input->maxCapacity
         );
-
         
-        $this->courseRepository->save($input);
+        $this->courseRepository->save($newCourse);
     }
 }
