@@ -3,14 +3,15 @@
 namespace App\Application\UseCase;
 use App\Domain\Enum\CourseStatusEnum;
 use App\Domain\Model\Course;
-use App\Domain\Repository\CourseRepository;
+use App\Domain\Repository\CourseRepositoryInterface;
 class ToggleCourseStatusUseCase{
     public function __construct(
-        private CourseRepository $_repo
+        private CourseRepositoryInterface $_repo
     )
     {}
-    public function toggleStatus(string $id, CourseStatusEnum $statusEnum){
-        $course = _repo ->  findById($id);
-        $course -> $status = (string)$statusEnum;
+    public function execute(string $id, CourseStatusEnum $statusEnum){
+        $course = $this->_repo ->  findById($id);
+        $courseObj = Course::restore($course ->id, $course -> title,$course -> description,$course -> target,$course -> status,$course -> isMandatory,$course -> durationInHours, $course -> maxCapacity);
+        $this->_repo -> save($courseObj);
     }
 }
