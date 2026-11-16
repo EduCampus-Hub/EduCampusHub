@@ -1,8 +1,5 @@
 <?php
 namespace App\Application\DTO;
-
-use TargetAudienceEnum;
-
 /*
         public int $maxCapacity,
         public TargetAudienceEnum $target,
