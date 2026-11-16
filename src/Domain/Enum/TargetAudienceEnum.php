@@ -1,4 +1,6 @@
 <?php
+namespace App\Domain\Enum;
+
 enum TargetAudienceEnum: string
 {
     case STUDENTS = 'students';
@@ -6,4 +8,3 @@ enum TargetAudienceEnum: string
     case ATC = 'atc';
     case ALL = 'all';
 }
-?>
