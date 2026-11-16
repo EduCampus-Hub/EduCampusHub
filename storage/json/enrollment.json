@@ -1,0 +1,9 @@
+[
+    {
+        "id": "E1001",
+        "user_id": "U2",
+        "course_id": "C101",
+        "enrolled_at": "2026-11-08 10:00:00",
+        "status": "PENDING"
+    }
+]
