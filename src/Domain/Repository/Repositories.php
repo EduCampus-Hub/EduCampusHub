@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Domain\Repository;
 
+use App\Domain\Model\Enrollment;
 interface EnrollmentRepositoryInterface
 {
     public function findById(string $id): ?Enrollment;
