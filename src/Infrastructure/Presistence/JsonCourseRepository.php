@@ -10,7 +10,15 @@ class JsonCourseRepository implements CourseRepositoryInterface{
     public function __construct(private string $filePath){}
     public function save(Course $course): bool
     {
+        //prima controllo che funzioni anche come update non solo da save di corsi nuovi.
         $allItems = $this-> findAll();
+        //controllo che nessuno abbia lo stesso ID nel caso lo cancello.
+        foreach($allItems as $index => $singleCourse){
+            if($singleCourse ->id === $course->id){
+                array_splice($allItems, $index,1);
+                break;
+            }
+        }
         $content = array_map(function (Course $courseT){
             return [
                 'id'=> $courseT->id,
@@ -33,7 +41,11 @@ class JsonCourseRepository implements CourseRepositoryInterface{
             'durationInHours' => $course->durationInHours,
             'maxCapacity' => $course->maxCapacity
         ];
-        file_put_contents($this->filePath, json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        if(file_put_contents($this->filePath, json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))){
+            return true;
+        }
+        return false;
+        
     }
     public function findById(string $id): ?Course
     {
