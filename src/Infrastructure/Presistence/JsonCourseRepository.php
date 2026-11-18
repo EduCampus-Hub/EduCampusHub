@@ -102,7 +102,7 @@ class JsonCourseRepository implements CourseRepositoryInterface{
     {
         $this -> initializeSearch();
         $jsonContent = file_get_contents($this -> filePath);//ritorna il content del file in quella directory.
-        //ora la devo formattare in stile json
+        // ora devo formattare il contenuto in stile json
         $formattedContent = json_decode($jsonContent,true); //restituisce anche i tipi, int, string bool (non gli enum peróco)
         if($formattedContent === null){
             return [];
@@ -124,7 +124,7 @@ class JsonCourseRepository implements CourseRepositoryInterface{
         return $courses;
 
     }
-    //metodo da chiamare all'inizio di ogni metodo della repo, serve a verificare se la filepath esiste
+    //metodo da chiamre all'inizio della repo, per verificare se il filepath esiste, altrimenti lancio un eccezione.
     private function initializeSearch(){
             if (!file_exists($this->filePath)){
             throw new RuntimeException("File not found");
