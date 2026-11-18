@@ -4,7 +4,7 @@ namespace App\Application\UseCase;
 
 use App\Domain\Model\Certificate;
 
-class CertificateDTO
+readonly class CertificateDTO
 {
     public function __construct(
         public readonly int $id,
