@@ -1,8 +1,12 @@
 <?php
 namespace App\Application\UseCase;
+
+use App\Application\DTO\CreateCourseDTO;
+use App\Domain\Enum\CourseStatusEnum;
 use App\Domain\Model\Course;
 use InvalidArgumentException;
 use App\Domain\Repository\CourseRepositoryInterface;
+use App\Domain\Enum\TargetAudienceEnum;
 /*
         public string $id,
         public string $title,
@@ -19,7 +23,7 @@ class  CreateCourseUseCase
         private CourseRepositoryInterface $courseRepository
     ) {}
 
-    public function execute(Course $input): void
+    public function execute(CreateCourseDTO $input): void
     {
         if(trim(empty($input->title)) || empty($input->description)) {
             throw new InvalidArgumentException('Title and description are required.');
@@ -32,8 +36,8 @@ class  CreateCourseUseCase
         $newCourse = Course::create(
             title: $input->title,
             description: $input->description,
-            target: $input->target,
-            status: $input->status,
+            target: TargetAudienceEnum::from ($input->targetAudience),
+            status: CourseStatusEnum::from($input->status),
             isMandatory: $input->isMandatory,
             durationInHours: $input->durationInHours,
             maxCapacity: $input->maxCapacity

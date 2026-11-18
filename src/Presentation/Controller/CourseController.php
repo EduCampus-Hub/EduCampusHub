@@ -2,7 +2,7 @@
 
 namespace App\Presentation\Controller;
 
-use App\Presentation\Controller\CreateCourseUseCase;
+use App\Application\UseCase\CreateCourseUseCase;
 use App\Application\DTO\CreateCourseDTO;
 use InvalidArgumentException;
 
