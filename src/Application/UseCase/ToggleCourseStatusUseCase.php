@@ -11,7 +11,7 @@ class ToggleCourseStatusUseCase{
     {}
     public function execute(string $id, CourseStatusEnum $statusEnum){
         $course = $this->_repo ->  findById($id);
-        $courseObj = Course::restore($course ->id, $course -> title,$course -> description,$course -> target,$statusEnum,$course -> isMandatory,$course -> durationInHours, $course -> maxCapacity);
+        $courseObj = Course::restore($course ->id, $course -> title,$course -> description,$course -> target, $statusEnum, $course -> isMandatory,$course -> durationInHours, $course -> maxCapacity);
         $this->_repo -> save($courseObj);
     }
 }
