@@ -29,10 +29,17 @@ class CourseController
                     isMandatory: isset($_POST['isMandatory']) ? (bool)$_POST['isMandatory'] : false,
                     durationInHours: (int)$_POST['durationInHours']
                 );
+
+                $this->createCourseUseCase->execute($input);
+
+                header('Location: /');
+                exit;
             } catch (InvalidArgumentException $e) 
             {
-                echo "Error: " . $e->getMessage();
+                $errorMessage = $e->getMessage();
             }
         }
+        //TODO: da cambiare
+        // require_once dirname(__DIR__, 3) . '/views/create_request.php';
     }
 }
