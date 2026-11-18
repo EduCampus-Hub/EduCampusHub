@@ -13,14 +13,22 @@ class Certificate
         public readonly string $certificateCode //dobbia crearlo noi, facendoci passare
     ) {}
 
-    public static function create(int $id, string $certificateCode): self
+    public static function create(string $enrollmentId, string $userId,  string $coursedId, string $issuedAt): self
     {
-    /*    
-    return new self(
-            id: null, 
-            certificateCode
-        );
-        */
+        
+        return new self(
+                id: null, 
+                enrollmentId: trim($enrollmentId),
+                userId: trim($userId),
+                coursedId: trim($coursedId),
+                issuedAt: trim($issuedAt)
+                certificateCode: null
+            );
+
+    }
+    public static function restore(int $id, string $enrollmentId, string $userId, string $coursedId, string $issuedAt, string $certificateCode ): self
+    {
+        return new self($id, $enrollmentId, $userId, $coursedId, $issuedAt, $certificateCode);
     }
 
 }
