@@ -10,4 +10,5 @@ interface CertificateRepositoryInterface
     public function findByEnrollment(string $EnrollmentId): ?Certificate;
     public function findByUser(string $userId): array;
     public function save(Certificate $certificate): bool;
+    
 }
