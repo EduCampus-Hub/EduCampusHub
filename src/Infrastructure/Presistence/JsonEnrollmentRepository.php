@@ -28,6 +28,12 @@ class JsonEnrollmentRepository implements EnrollmentRepositoryInterface
     }
     public function findByUserId(string $id): ?Enrollment
     {
+        $enrollments = $this-> findall();
+        foreach ($enrollments as $enrollment) {
+            if ($enrollment->user_id === $id) {
+                return $enrollment;
+            }
+        }
         return null;
     }
     public function findByUserAndCourse(string $userId, string $courseId): ?Enrollment
@@ -44,7 +50,14 @@ class JsonEnrollmentRepository implements EnrollmentRepositoryInterface
     }
     public function countByCourse(string $courseId): int
     {
-        return 0;
+        $enrollments = $this -> findAll();
+        $counter = 0;
+        foreach ($enrollments as $enrollment) {
+            if ($enrollment->course_id === $courseId) {
+                $counter++;
+            }
+        }
+        return $counter;
     }
     public function save(Enrollment $enrollment): bool
     {
