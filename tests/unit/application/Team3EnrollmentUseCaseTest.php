@@ -1,5 +1,5 @@
 <?php
-
+//nomi classi test devono finire con TEST !!!!!
 namespace tests\unit\application;
  //test da completare perché non ho ancora la classe, ho iniziato la struttura
 class Team3EnrollmentUseCaseTest extends TestCase{
