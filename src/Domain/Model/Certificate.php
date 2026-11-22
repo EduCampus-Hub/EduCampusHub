@@ -48,5 +48,8 @@ class Certificate
         // Compone EDU-corso-utente con un suffisso casuale di quattro cifre.
         return \sprintf('EDU-%s-%s-%04d', $coursedId, $userId, random_int(0, 9999));
     }
+    /*
+    
+    */
 
 }
