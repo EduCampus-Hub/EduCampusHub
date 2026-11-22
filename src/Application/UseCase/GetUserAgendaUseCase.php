@@ -4,24 +4,17 @@ namespace App\Application\UseCase;
 
 use App\Application\DTO\UserAgendaDTO;
 use App\Domain\Model\Agenda;
-use App\Domain\Model\Certificate;
-use App\Domain\Repository\CertificateRepositoryInterface;
+use App\Domain\Repository\AgendaRepositoryInterface;
 
 class GetUserAgendaUseCase
 {
     public function __construct(
-        private readonly CertificateRepositoryInterface $certificateRepository
+        private readonly AgendaRepositoryInterface $agendaRepository
     ) {}
 
     public function execute(string $userId): UserAgendaDTO
     {
-        $certificates = $this->certificateRepository->findByUser($userId);
-        $courseIds = array_map(
-            static fn (Certificate $certificate): string => $certificate->coursedId,
-            $certificates
-        );
-
-        $agenda = Agenda::create($courseIds);
+        $agenda = $this->agendaRepository->findByUser($userId) ?? Agenda::create([]);
 
         return new UserAgendaDTO(
             userId: $userId,
