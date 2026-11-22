@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Application\UseCase;
+
+use App\Application\DTO\CreateEnrollUserDTO;
+use App\Domain\Enum\Status;
+use App\Domain\Model\Enrollment;
+use App\Domain\Repository\EnrollmentRepositoryInterface;
+use DateTime;
+
+class EnrollUserUseCase
+{
+    public function __construct(
+        private EnrollmentRepositoryInterface $repository
+    ) {
+    }
+
+    public function execute(CreateEnrollUserDTO $dto): void
+    {  
+        $existingEnrollment = $this->repository->findByUserAndCourse($dto->user_id, $dto->course_id);
+        
+    }
+}
+
+//utilizziamo findByUserAndCourse() per controllare se l'iscrizione esiste gia per non iscriversi due volte allo stesso scoro
