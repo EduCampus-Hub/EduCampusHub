@@ -1,25 +1,45 @@
 <?php
+
 namespace tests\unit\domain;
 
-class Team3EnrollmentTest extends TestCase{
-    public function testEnrollmentCreation():void{
-         //test da completare perché non ho ancora la classe
+use App\Domain\Model\Enrollment;
+use PHPUnit\Framework\TestCase;
 
-        $creation= Enrollment::create('U2', 'C101', '2026-11-08 10:00:00', 'PENDING');
-        $this->assertNull
-        $this->assertEquals('U2', $creation->$user_id);
-        $this->assertEquals('C101', $creation->$course_id);
-        $this->assertEquals('2026-11-08 10:00:00', $creation->$enrollment_at);
-        $this->assertEquals('PENDING', $creation->$status);
-    }
-    public function testEnrollmentRestore():void
+class test_team3_enrollment extends TestCase
+{
+    public function testEnrollmentCreation(): void
     {
-        //test da completare perché non ho ancora la classe
-        $restoration=Enrollment::restore('U2', 'C101', '2026-11-08 10:00:00', 'PENDING');
-        $this->assertNull
-        $this->assertEquals('U2', $restoration->$user_id);
-        $this->assertEquals('C101', $restoration->$course_id);
-        $this->assertEquals('2026-11-08 10:00:00', $restoration->$enrollment_at);
-        $this->assertEquals('PENDING', $restoration->$status);
+        $creation = Enrollment::create(
+        'dfv',   
+        'U2',
+            'C101',
+            new DateTime('2026-11-08 10:00:00'),
+            'PENDING'
+        );
+
+        $this->assertInstanceOf(Enrollment::class, $creation);
+
+        $this->assertEquals('U2', $creation->user_id);
+        $this->assertEquals('C101', $creation->course_id);
+        $this->assertEquals('2026-11-08 10:00:00', $creation->enrollment_at);
+        $this->assertEquals(EnrollmentStatus::PENDING, $creation->status);
+    }
+
+    public function testEnrollmentRestore(): void
+    {
+        $restoration = Enrollment::restore(
+         'dfv',    
+        'U2',
+            'C101',
+             new DateTime('2026-11-08 10:00:00'),
+            'PENDING'
+        );
+
+        $this->assertInstanceOf(Enrollment::class, $restoration);
+
+        $this->assertEquals('U2', $restoration->user_id);
+        $this->assertEquals('C101', $restoration->course_id);
+        $this->assertEquals('2026-11-08 10:00:00', $restoration->enrollment_at);
+        $this->assertEquals(EnrollmentStatus::PENDING, $restoration->status);
     }
 }
