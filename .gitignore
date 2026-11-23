@@ -346,3 +346,6 @@ ASALocalRun/
 /db_data/
 .DS_Store
 .vscode/
+
+#rimozione della cartella di risultati dei test
+.phpunit.cache/
