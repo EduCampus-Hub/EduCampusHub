@@ -8,10 +8,12 @@ class Agenda
         public readonly array $listaCorsi
     ) {}
 
+
     public static function create(array $listaCorsi): self
     {
         return new self($listaCorsi);
     }
+
 
     public static function restore(array $listaCorsi): self
     {
