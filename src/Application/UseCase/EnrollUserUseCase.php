@@ -18,7 +18,17 @@ class EnrollUserUseCase
     public function execute(CreateEnrollUserDTO $dto): void
     {  
         $existingEnrollment = $this->repository->findByUserAndCourse($dto->user_id, $dto->course_id);
-        
+        if ($existingEnrollment) {
+            return;
+        }
+        $enrollment = Enrollment::create(
+            $dto->uniqueId(),
+            $dto->user_id,
+            $dto->course_id,
+            new DateTime(),
+            Status::Pending
+        );
+        $this->repository->save($enrollment);
     }
 }
 
