@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Application\DTO\CreateCourseDTO;
 use App\Application\UseCase\CreateCourseUseCase;
 use App\Domain\Enum\CourseStatusEnum;
 use App\Domain\Enum\TargetAudienceEnum;
@@ -31,12 +32,12 @@ class CreateCourseUseCaseTest extends TestCase
 
         $useCase = new CreateCourseUseCase($repository);
 
-        $useCase->execute(Course::restore(
+        $useCase->execute(new CreateCourseDTO(
             id: 'course-input',
             title: 'PHP Programming',
             description: 'Corso avanzato di PHP',
-            target: TargetAudienceEnum::STUDENTS,
-            status: CourseStatusEnum::DRAFT,
+            targetAudience: 'STUDENTS',
+            status: 'DRAFT',
             isMandatory: true,
             durationInHours: 40,
             maxCapacity: 30
@@ -55,12 +56,12 @@ class CreateCourseUseCaseTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Title and description are required.');
 
-        $useCase->execute(Course::restore(
+        $useCase->execute(new CreateCourseDTO(
             id: 'course-input',
             title: '',
             description: 'Descrizione',
-            target: TargetAudienceEnum::STUDENTS,
-            status: CourseStatusEnum::DRAFT,
+            targetAudience: 'STUDENTS',
+            status: 'DRAFT',
             isMandatory: false,
             durationInHours: 10,
             maxCapacity: 20
@@ -77,12 +78,12 @@ class CreateCourseUseCaseTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Max capacity and duration must be greater than zero.');
 
-        $useCase->execute(Course::restore(
+        $useCase->execute(new CreateCourseDTO(
             id: 'course-input',
             title: 'Corso',
             description: 'Descrizione',
-            target: TargetAudienceEnum::ALL,
-            status: CourseStatusEnum::DRAFT,
+            targetAudience: 'ALL',
+            status: 'DRAFT',
             isMandatory: false,
             durationInHours: 0,
             maxCapacity: 0
