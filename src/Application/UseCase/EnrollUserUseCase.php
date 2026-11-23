@@ -14,6 +14,7 @@ class EnrollUserUseCase
         private EnrollmentRepositoryInterface $repository
     ) {
     }
+    private $incrementalId = 0;
 
     public function execute(CreateEnrollUserDTO $dto): void
     {  
@@ -21,8 +22,11 @@ class EnrollUserUseCase
         if ($existingEnrollment) {
             return;
         }
+        
+        $this->incrementalId= $this->incrementalId + 1;
+
         $enrollment = Enrollment::create(
-            $dto->uniqueId(),
+            $this->incrementalId,
             $dto->user_id,
             $dto->course_id,
             new DateTime(),
