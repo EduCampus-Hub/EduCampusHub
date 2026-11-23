@@ -7,7 +7,7 @@ use App\Domain\Model\Certificate;
 readonly class CertificateDTO
 {
     public function __construct(
-        public readonly int $id,
+        public readonly string $id,
         public readonly string $enrollmentId,
         public readonly string $userId,
         public readonly string $coursedId,

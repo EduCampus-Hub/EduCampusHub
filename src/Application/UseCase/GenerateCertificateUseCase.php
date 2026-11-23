@@ -22,7 +22,13 @@ class GenerateCertificateUseCase
 
         // Creo la nuova instanza
         $certificate = Certificate::create(
-            id: 0,
+            id: sprintf(
+                '%04d-%04d-%04d-%04d',
+                random_int(0, 9999),
+                random_int(0, 9999),
+                random_int(0, 9999),
+                random_int(0, 9999)
+            ),
             enrollmentId: $enrollmentId,
             userId: $userId,
             coursedId: $coursedId,
