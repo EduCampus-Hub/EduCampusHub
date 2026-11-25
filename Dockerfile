@@ -14,5 +14,8 @@ RUN apt-get update && apt-get install -y \
 # Abilita il modulo rewrite di Apache
 RUN a2enmod rewrite
 
+# Riserva una directory scrivibile da Apache per il volume dei corsi.
+RUN install -d -o www-data -g www-data /var/lib/educampus
+
 # Permette al file .htaccess di sovrascrivere le regole di Apache
 RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf

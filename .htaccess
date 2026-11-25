@@ -1,5 +1,7 @@
 RewriteEngine On
 
+RewriteRule ^storage/json(?:/|$) - [F,L]
+
 # Se non è un file reale (es. css, js, immagini)...
 RewriteCond %{REQUEST_FILENAME} !-f
 # ...e non è una cartella reale...
