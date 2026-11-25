@@ -1,13 +1,15 @@
 <?php
 namespace App\Application\DTO;
+use app\Domain\Enum\UserRoleEnum;
 readonly class RegisterUserDTO
 {
+    // Il caso d'uso si occupa di creare l'identificativo e l'hash.
     public function __construct(
         public int $id,
         public string $name,
         public string $email,
-        public string $password_hash,
+        public string $password,
         public UserRoleEnum $role,
-        public ?string $user_class
+        public ?string $user_class=null
     ){}
 }
