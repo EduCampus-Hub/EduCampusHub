@@ -1,10 +1,10 @@
 <?php
-namespace App\Domain;
-use App\Domain\Enum\UserRoleEnum;
+namespace app\Domain\Model;
+use app\Domain\Enum\UserRoleEnum;
 class User
 {
     public function __construct(
-        public int $id,
+        public string $id,
         public string $name,
         public string $email,
         public string $password_hash,
