@@ -4,10 +4,10 @@ namespace App\Application\UseCase;
 
 use App\Domain\Model\Certificate;
 
-class CertificateDTO
+readonly class CertificateDTO
 {
     public function __construct(
-        public readonly int $id,
+        public readonly string $id,
         public readonly string $enrollmentId,
         public readonly string $userId,
         public readonly string $coursedId,

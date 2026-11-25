@@ -8,6 +8,10 @@ interface CertificateRepositoryInterface
 {
     public function findById(string $id): ?Certificate;
     public function findByEnrollment(string $EnrollmentId): ?Certificate;
+    /**
+     * @return Certificate[]
+     */
     public function findByUser(string $userId): array;
     public function save(Certificate $certificate): bool;
+    
 }
