@@ -6,7 +6,7 @@ use App\Domain\Enum\Status;
 use App\Domain\Model\Enrollment;
 use App\Domain\Repository\EnrollmentRepositoryInterface;
 use DateTime;
-class GetEnrollUserUseCaseTest extends TestCase
+class Team3_GetEnrollUserUseCaseTest extends TestCase
 {
     public function testReturnsEnrollmentsForUser(): void
     {

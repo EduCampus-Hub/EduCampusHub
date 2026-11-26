@@ -8,7 +8,7 @@ use App\Domain\Enum\Status;
 use App\Domain\Model\Enrollment;
 use App\Domain\Repository\EnrollmentRepositoryInterface;
  //test da completare perché non ho ancora la classe, ho iniziato la struttura
-class Team3EnrollmentUseCaseTest extends TestCase{
+class Team3_EnrollmentUseCaseTest extends TestCase{
    public function testSavesNewEnrollment(): void
     {
         $repo = $this->createMock(EnrollmentRepositoryInterface::class);
