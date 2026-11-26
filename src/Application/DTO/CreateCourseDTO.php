@@ -2,18 +2,48 @@
 
 namespace App\Application\DTO;
 
-readonly class CreateCourseDTO extends CourseInput
+use App\Domain\Enum\CourseStatusEnum;
+use App\Domain\Enum\TargetAudienceEnum;
+use InvalidArgumentException;
+
+readonly class CreateCourseDTO
 {
+    public const MISSING_TEXT = 'Title and description are required.';
+    public const INVALID_NUMBERS = 'Max capacity and duration must be greater than zero.';
+    public const INVALID_TARGET = 'Invalid target audience.';
+    public const INVALID_STATUS = 'Invalid course status.';
+
     public function __construct(
-        int $maxCapacity,
-        string $targetAudience,
-        string $status,
+        public int $maxCapacity,
+        public string $targetAudience,
+        public string $status,
         public string $id,
-        string $title,
-        string $description,
-        bool $isMandatory,
-        int $durationInHours
-    ) {
-        parent::__construct($maxCapacity, $targetAudience, $status, $title, $description, $isMandatory, $durationInHours);
+        public string $title,
+        public string $description,
+        public bool $isMandatory,
+        public int $durationInHours
+    ) {}
+
+    public function validate(): void
+    {
+        if (trim($this->title) === '' || trim($this->description) === '') {
+            throw new InvalidArgumentException(self::MISSING_TEXT);
+        }
+
+        if ($this->maxCapacity <= 0 || $this->durationInHours <= 0) {
+            throw new InvalidArgumentException(self::INVALID_NUMBERS);
+        }
+    }
+
+    public function targetEnum(): TargetAudienceEnum
+    {
+        return TargetAudienceEnum::tryFrom(strtolower($this->targetAudience))
+            ?? throw new InvalidArgumentException(self::INVALID_TARGET);
+    }
+
+    public function statusEnum(): CourseStatusEnum
+    {
+        return CourseStatusEnum::tryFrom(strtolower($this->status))
+            ?? throw new InvalidArgumentException(self::INVALID_STATUS);
     }
 }

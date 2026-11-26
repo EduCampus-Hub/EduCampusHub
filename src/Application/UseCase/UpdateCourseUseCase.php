@@ -2,7 +2,7 @@
 
 namespace App\Application\UseCase;
 
-use App\Application\DTO\CourseInput;
+use App\Application\DTO\CreateCourseDTO;
 use App\Domain\Model\Course;
 use App\Domain\Repository\CourseRepositoryInterface;
 use RuntimeException;
@@ -11,7 +11,7 @@ class UpdateCourseUseCase
 {
     public function __construct(private CourseRepositoryInterface $courseRepository) {}
 
-    public function execute(string $id, CourseInput $input): bool
+    public function execute(string $id, CreateCourseDTO $input): bool
     {
         $existingCourse = $this->courseRepository->findById($id);
         if ($existingCourse === null) {
