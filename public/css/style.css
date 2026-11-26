@@ -128,6 +128,11 @@ th {
     color: #a94442;
 }
 
+.btn-success {
+    border-color: #2e7d32;
+    background: #2e7d32;
+}
+
 .actions {
     display: flex;
     flex-wrap: wrap;
@@ -151,6 +156,64 @@ th {
 .badge.bozza {
     background: #eee8cf;
     color: #71601e;
+}
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.course-card,
+.course-form {
+    background: #fff;
+    border: 1px solid #dfe5e8;
+    border-radius: 8px;
+    padding: 18px;
+}
+
+.course-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.course-card-header h2 {
+    margin: 0;
+}
+
+.course-card .meta {
+    margin: 14px 0;
+    color: #667681;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.form-grid label,
+.upload-form label {
+    display: grid;
+    gap: 6px;
+}
+
+.form-grid input,
+.form-grid select,
+.upload-form input[type="file"] {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #bdc7cc;
+    border-radius: 5px;
+}
+
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
 }
 
 @media (max-width: 700px) {
