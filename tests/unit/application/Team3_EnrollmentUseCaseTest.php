@@ -33,4 +33,24 @@ class Team3_EnrollmentUseCaseTest extends TestCase{
             new CreateEnrollUserDTO('user-1', 'course-1')
         );
     }
+
+    public function testCreatesEnrollmentWithCorrectData(): void
+    {
+        $repo = $this->createMock(EnrollmentRepositoryInterface::class);
+        $repo->method('findByUserAndCourse')->willReturn(null);
+
+        $repo->expects($this->once())
+            ->method('save')
+            ->with($this->callback(function (Enrollment $enrollment): bool {
+                return $enrollment->id === '1'
+                    && $enrollment->user_id === 'user-1'
+                    && $enrollment->course_id === 'course-1'
+                    && $enrollment->status === Status::Pending;
+            }));
+
+        (new EnrollUserUseCase($repo))->execute(
+            new CreateEnrollUserDTO('user-1', 'course-1')
+        );
+    }
+
 }
