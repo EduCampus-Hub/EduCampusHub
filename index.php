@@ -5,6 +5,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/vendor/autoload.php';
 
 use app\Application\UseCase\AuthenticateUserUseCase;
+use app\Application\UseCase\RegisterUserUseCase;
 use app\Infrastructure\Persistence\JsonUserRepository;
 use app\Infrastructure\Router;
 use app\Infrastructure\Session\PhpSessionAdapter;
@@ -14,7 +15,8 @@ use app\Presentation\Controller\AuthController;
 $repository = new JsonUserRepository(__DIR__ . '/storage/json/users.json');
 $sessionManager = new PhpSessionAdapter();
 $authUseCase = new AuthenticateUserUseCase($repository, $sessionManager);
-$authController = new AuthController($authUseCase, $sessionManager);
+$registerUseCase = new RegisterUserUseCase($repository);
+$authController = new AuthController($authUseCase, $registerUseCase, $sessionManager);
 
 
 // 3. Configurazione delle Rotte
@@ -26,6 +28,10 @@ $router->get('/', [$authController, 'handleLogin']);
 $router->get('/index', [$authController, 'handleLogin']);
 $router->get('/index.php', [$authController, 'handleLogin']);
 $router->post('/index.php', [$authController, 'handleLogin']);
+$router->get('/register', [$authController, 'handleRegister']);
+$router->post('/register', [$authController, 'handleRegister']);
+$router->get('/register.php', [$authController, 'handleRegister']);
+$router->post('/register.php', [$authController, 'handleRegister']);
 $router->get('/logout', [$authController, 'handleLogout']);
 
 

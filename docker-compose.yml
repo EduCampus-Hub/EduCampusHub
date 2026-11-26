@@ -6,4 +6,5 @@ services:
       - "8080:80"
     volumes:
       - .:/var/www/html
+    command: sh -c "cd /var/www/html && composer install --no-interaction --prefer-dist && apache2-foreground"
     restart: unless-stopped
