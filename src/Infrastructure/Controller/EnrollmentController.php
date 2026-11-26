@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presentation\Controller;
+namespace App\Infrastructure\Controller;
 
 use App\Application\DTO\CreateEnrollUserDTO;
 use App\Application\DTO\ReadEnrollUserDTO;

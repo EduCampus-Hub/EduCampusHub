@@ -1,0 +1,12 @@
+[
+    {
+        "id": "1522779f-62e0-4d10-a501-21ffe73e184c",
+        "title": "Test",
+        "description": "Test",
+        "target": "all",
+        "status": "draft",
+        "isMandatory": true,
+        "durationInHours": 3000,
+        "maxCapacity": 1
+    }
+]
