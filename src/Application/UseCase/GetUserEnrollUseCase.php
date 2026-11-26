@@ -17,7 +17,7 @@ class GetUserEnrollUseCase
 
     //buona norma dare il nome execute a tutti i metodi che eseguono un'azione
     // in questo caso recuperare la lista delle richieste
-    public function execute($user_id):array
+    public function execute(string $user_id):array
     {
         //sort --> sort crescente
         //usort -->sort decrescente
