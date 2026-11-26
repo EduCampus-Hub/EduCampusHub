@@ -1,0 +1,10 @@
+[
+    {
+        "id": "CERT-900",
+        "enrollment_id": "E1001",
+        "user_id": "U2",
+        "course_id": "C101",
+        "issued_at": "2026-11-08",
+        "certificate_code": "EDU-C101-U2-8842"
+    }
+]

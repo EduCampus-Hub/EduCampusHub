@@ -20,15 +20,8 @@ class GenerateCertificateUseCase
             throw new RuntimeException('Certificate already exists for this enrollment.');
         }
 
-        // Creo la nuova instanza
+        // Creo la nuova istanza
         $certificate = Certificate::create(
-            id: sprintf(
-                '%04d-%04d-%04d-%04d',
-                random_int(0, 9999),
-                random_int(0, 9999),
-                random_int(0, 9999),
-                random_int(0, 9999)
-            ),
             enrollmentId: $enrollmentId,
             userId: $userId,
             coursedId: $coursedId,
