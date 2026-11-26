@@ -17,7 +17,7 @@ class AuthenticateUserUseCase
 
     public function execute(LoginDTO $dto): ?User
     {
-        $password = $dto->password;
+        $password = $dto->password_hash;
         // bcrypt usa al massimo 72 byte. Verifichiamo la password intera.
         if ($password === '' || strlen($password) > 72 || str_contains($password, "\0")) {
             return null;

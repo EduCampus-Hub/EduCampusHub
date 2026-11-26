@@ -11,4 +11,8 @@ class User
         public UserRoleEnum $role,
         public ?string $user_class
     ) {}
+    public function getPasswordHash()
+    {
+        return $this->password_hash;
+    }
 }

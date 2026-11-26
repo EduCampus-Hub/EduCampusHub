@@ -1,8 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace App\Infrastructure\Session;
-use App\Application\Service\SessionManagerInterface;
-use App\Domain\Model\User;
+
+namespace app\Infrastructure\Session;
+
+use app\Application\Service\SessionManagerInterface;
+use app\Domain\Model\User;
 
 class PhpSessionAdapter implements SessionManagerInterface
 {

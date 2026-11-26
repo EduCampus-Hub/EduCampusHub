@@ -24,7 +24,7 @@ class RegisterUserUseCase
             throw new InvalidArgumentException('Inserisci un nome e un indirizzo email valido.');
         }
 
-        $password = $dto->password;
+        $password = $dto->password_hash;
         if ($password === '' || strlen($password) > 72 || str_contains($password, "\0")) {
             throw new InvalidArgumentException('Inserisci una password valida lunga al massimo 72 byte.');
         }
