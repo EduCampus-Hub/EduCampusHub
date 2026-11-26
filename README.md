@@ -9,5 +9,5 @@ Ogni membro deve creare e usare una branch nominata secondo la struttura `cognom
 - Rimuovere il file `.gitkeep` da una cartella non appena vi si aggiungono classi o file.
 
 
-### Stato Team3
-- Terminati i test e merge soluzione su branch principale del Team3
+### Stato MERGE
+mergato team2-3-4
