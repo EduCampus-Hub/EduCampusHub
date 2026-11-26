@@ -2,7 +2,7 @@
 
 namespace App\Application\UseCase;
 
-use App\Application\DTO\CourseInput;
+use App\Application\DTO\CreateCourseDTO;
 use App\Domain\Model\Course;
 use App\Domain\Repository\CourseRepositoryInterface;
 use RuntimeException;
@@ -13,7 +13,7 @@ class CreateCourseUseCase
         private CourseRepositoryInterface $courseRepository
     ) {}
 
-    public function execute(CourseInput $input): void
+    public function execute(CreateCourseDTO $input): void
     {
         $input->validate();
 
