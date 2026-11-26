@@ -26,15 +26,17 @@ class JsonEnrollmentRepository implements EnrollmentRepositoryInterface
 
         return null;
     }
-    public function findByUserId(string $id): ?Enrollment
+    public function findByUserId(string $id): array
     {
-        $enrollments = $this-> findall();
-        foreach ($enrollments as $enrollment) {
+        $matches = [];
+
+        foreach ($this->findAll() as $enrollment) {
             if ($enrollment->user_id === $id) {
-                return $enrollment;
+                $matches[] = $enrollment;
             }
         }
-        return null;
+
+        return $matches;
     }
     public function findByUserAndCourse(string $userId, string $courseId): ?Enrollment
     {
