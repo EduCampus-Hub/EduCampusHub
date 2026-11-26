@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accedi | EduCampus Hub</title>
-    <link rel="stylesheet" href="../../../public/css/style.css">
+    <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
     <main class="auth-page">
         <section class="auth-card">
-            <a class="brand" href="login.php" aria-label="EduCampus Hub">
+            <a class="brand" href="/index.php" aria-label="EduCampus Hub">
                 <span class="brand-mark">E</span>
                 <span>EduCampus <strong>Hub</strong></span>
             </a>
