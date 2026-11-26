@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Infrastructure;
 
@@ -25,7 +25,7 @@ class Router
 
     public function dispatch(string $method, string $uri): void
     {
-        // Puliamo l'URI (rimuoviamo eventuali query string)
+        // Puliamo l'URI rimuovendo query string e slash finali
         $parsedUrl = parse_url($uri, PHP_URL_PATH);
         $path = '/' . trim($parsedUrl, '/');
 
@@ -38,4 +38,5 @@ class Router
         http_response_code(404);
         echo "<h1>404 - Pagina non trovata</h1>";
     }
+    //ass
 }
