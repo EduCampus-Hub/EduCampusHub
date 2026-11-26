@@ -1,5 +1,5 @@
 <?php
-namespace App\Application\DTO;
+namespace app\Application\DTO;
 use app\Domain\Enum\UserRoleEnum;
 readonly class RegisterUserDTO
 {
@@ -8,7 +8,7 @@ readonly class RegisterUserDTO
         public int $id,
         public string $name,
         public string $email,
-        public string $password,
+        public string $password_hash,
         public UserRoleEnum $role,
         public ?string $user_class=null
     ){}
