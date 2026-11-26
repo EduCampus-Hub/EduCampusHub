@@ -1,34 +1,35 @@
 <?php
 
-use App\Application\DTO\RegisterUserDTO;
-use App\Domain\User;    
+namespace app\Application\UseCase;
+
+use app\Application\DTO\RegisterUserDTO;
+use app\Domain\Model\User;
+use app\Domain\Repository\UserRepositoryInterface;
+use Exception;
 
 class RegisterUserUseCase
 {
-    private $userRepository;
-    private $passwordHasher;
+    public function __construct(
+        private UserRepositoryInterface $userRepository,
+        private object $passwordHasher
+    ) {}
 
-    public function __construct(private UserRepositoryInterface $userRepository)
+    public function execute(RegisterUserDTO $dto): User
     {
-    }
-
-    public function execute(RegisterUserDTO $dto)
-    {
-        $user = $this->userRepository->findByEmail($dto->email);
-
-        if ($user) {
+        if ($this->userRepository->findByEmail($dto->email)) {
             throw new Exception('User already exists');
         }
 
-        
+        $passwordHash = $this->passwordHasher->hash($dto->password_hash);
         $user = new User(
             $dto->id,
             $dto->name,
             $dto->email,
-            $dto->password_hash,
+            $passwordHash,
             $dto->role,
             $dto->user_class
         );
+
         $this->userRepository->save($user);
 
         return $user;
