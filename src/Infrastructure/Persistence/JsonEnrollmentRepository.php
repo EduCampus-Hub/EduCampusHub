@@ -1,6 +1,6 @@
 <?php
 
-namespace Infrastructure\Persistence;
+namespace App\Infrastructure\Persistence;
 
 use App\Domain\Model\Enrollment;
 use App\Domain\Enum\Status;
@@ -16,33 +16,26 @@ class JsonEnrollmentRepository implements EnrollmentRepositoryInterface
 
     public function findById(string $id): ?Enrollment
     {
-        $enrollments = $this->findAll();
-
-        foreach ($enrollments as $enrollment) {
-            if ($enrollment->id === (int) $id) {
+        foreach ($this->findAll() as $enrollment) {
+            if ($enrollment->id === $id) {
                 return $enrollment;
             }
         }
 
         return null;
     }
+
     public function findByUserId(string $id): array
     {
-        $matches = [];
-
-        foreach ($this->findAll() as $enrollment) {
-            if ($enrollment->user_id === $id) {
-                $matches[] = $enrollment;
-            }
-        }
-
-        return $matches;
+        return array_values(array_filter(
+            $this->findAll(),
+            static fn(Enrollment $enrollment): bool => $enrollment->user_id === $id
+        ));
     }
+
     public function findByUserAndCourse(string $userId, string $courseId): ?Enrollment
     {
-        $enrollments = $this->findAll();
-
-        foreach ($enrollments as $enrollment) {
+        foreach ($this->findAll() as $enrollment) {
             if ($enrollment->user_id === $userId && $enrollment->course_id === $courseId) {
                 return $enrollment;
             }
@@ -50,41 +43,43 @@ class JsonEnrollmentRepository implements EnrollmentRepositoryInterface
 
         return null;
     }
+
     public function countByCourse(string $courseId): int
     {
-        $enrollments = $this -> findAll();
-        $counter = 0;
-        foreach ($enrollments as $enrollment) {
-            if ($enrollment->course_id === $courseId) {
-                $counter++;
-            }
-        }
-        return $counter;
+        return count(array_filter(
+            $this->findAll(),
+            static fn(Enrollment $enrollment): bool => $enrollment->course_id === $courseId
+        ));
     }
+
     public function save(Enrollment $enrollment): bool
     {
         $enrollments = $this->findAll();
 
-        $data = array_map(function (Enrollment $enroll) {
-            return [
-                'id' => $enroll->id,
-                'userId' => $enroll->user_id,
-                'courseId' => $enroll->course_id,
-                'enrolledAt' => $enroll->enrolled_at->format('Y-m-d H:i:s'),
-            ];
-        }, $enrollments);
+        $existing = false;
+        $data = [];
+        foreach ($enrollments as $item) {
+            if ($item->id === $enrollment->id) {
+                $item = $enrollment;
+                $existing = true;
+            }
 
-        $data[] = [
-            'id' => $enrollment->id,
-            'userId' => $enrollment->user_id,
-            'courseId' => $enrollment->course_id,
-            'enrolledAt' => $enrollment->enrolled_at->format('Y-m-d H:i:s'),
-        ];
+            $data[] = $this->serialize($item);
+        }
 
-        file_put_contents(
-            $this->filePath,
-            json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-        );
+        if (!$existing) {
+            $data[] = $this->serialize($enrollment);
+        }
+
+        $directory = dirname($this->filePath);
+        if (!is_dir($directory) && !mkdir($directory, 0777, true) && !is_dir($directory)) {
+            throw new RuntimeException("Impossibile creare la directory: {$directory}");
+        }
+
+        $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        if ($json === false || file_put_contents($this->filePath, $json) === false) {
+            throw new RuntimeException("Impossibile salvare il file delle iscrizioni: {$this->filePath}");
+        }
 
         return true;
     }
@@ -95,35 +90,63 @@ class JsonEnrollmentRepository implements EnrollmentRepositoryInterface
             throw new RuntimeException("Impossibile trovare il file dei dati: {$this->filePath}");
         }
 
-        $content = file_get_contents($this->filePath);
-        // Rimuove eventuali caratteri UTF-8 BOM o spazi invisibili
-        $content = trim($content);
-        $data = json_decode($content, true);
-
-        if ($data === null) {
+        $content = trim((string) file_get_contents($this->filePath));
+        if ($content === '') {
             return [];
         }
 
-        $requests = [];
-        foreach ($data as $item) {
-            // Verifica che l'elemento sia un array con tutte le chiavi presenti
-            $status = Status::fromName($item['status'] ?? 'Pending');
-
-            if (
-                is_array($item) &&
-                isset($item['id'], $item['userId'], $item['courseId'], $item['enrolledAt'])
-            ) {
-                $requests[] = Enrollment::restore(
-                    id: (int) $item['id'],
-                    user_id: (string) $item['userId'],
-                    course_id: (string) $item['courseId'],
-                    enrolled_at: new \DateTime($item['enrolledAt']),
-                    status: $status
-                );
-            }
+        $data = json_decode($content, true);
+        if (!is_array($data)) {
+            throw new RuntimeException("Il file delle iscrizioni contiene JSON non valido: {$this->filePath}");
         }
 
-        return $requests;
+        $enrollments = [];
+        foreach ($data as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            $userId = $item['user_id'] ?? $item['userId'] ?? null;
+            $courseId = $item['course_id'] ?? $item['courseId'] ?? null;
+            $enrolledAt = $item['enrolled_at'] ?? $item['enrolledAt'] ?? null;
+
+            if (!isset($item['id'], $userId, $courseId, $enrolledAt)) {
+                continue;
+            }
+
+            $statusName = $item['status'] ?? 'Pending';
+            if (is_string($statusName)) {
+                $statusName = match (strtoupper($statusName)) {
+                    'PENDING' => 'Pending',
+                    'CONFIRMED' => 'Confirmed',
+                    'NEGATED' => 'Negated',
+                    default => $statusName,
+                };
+                $status = Status::fromName($statusName);
+            } else {
+                $status = Status::Pending;
+            }
+
+            $enrollments[] = Enrollment::restore(
+                id: (string) $item['id'],
+                user_id: (string) $userId,
+                course_id: (string) $courseId,
+                enrolled_at: new \DateTime($enrolledAt),
+                status: $status
+            );
+        }
+
+        return $enrollments;
     }
-    
+
+    private function serialize(Enrollment $enrollment): array
+    {
+        return [
+            'id' => $enrollment->id,
+            'user_id' => $enrollment->user_id,
+            'course_id' => $enrollment->course_id,
+            'enrolled_at' => $enrollment->enrolled_at->format('Y-m-d H:i:s'),
+            'status' => strtoupper($enrollment->status->name),
+        ];
+    }
 }
