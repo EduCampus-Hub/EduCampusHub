@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace app\Domain\Enum;
 
 enum UserRoleEnum: string

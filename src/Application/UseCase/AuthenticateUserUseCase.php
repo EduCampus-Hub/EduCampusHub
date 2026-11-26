@@ -1,29 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace app\Application\UseCase;
 
+
+use app\Application\DTO\LoginDTO;
+use app\Application\Service\SessionManagerInterface;
 use app\Domain\Model\User;
 use app\Domain\Repository\UserRepositoryInterface;
-use Exception;
 
 class AuthenticateUserUseCase
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
-        private object $passwordHasher
-    ) {}
+        private SessionManagerInterface $session
+    ) {
+    }
 
-    public function execute(string $email, string $password): User
+    public function execute(LoginDTO $dto): ?User
     {
+        $email = strtolower(trim($dto->email));
+        $password = $dto->password_hash;
+
+        if ($email === '' || $password === '' || strlen($password) > 72 || str_contains($password, "\0")) {
+            return null;
+        }
+
         $user = $this->userRepository->findByEmail($email);
-
-        if (!$user) {
-            throw new Exception('User not found');
+        if ($user === null || !password_verify($password, $user->getPasswordHash())) {
+            return null;
         }
 
-        if (!$this->passwordHasher->verify($password, $user->getPasswordHash())) {
-            throw new Exception('Invalid password');
-        }
+        $this->session->setAuthenticatedUser($user);
 
         return $user;
     }

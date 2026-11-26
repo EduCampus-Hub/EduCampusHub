@@ -51,17 +51,11 @@ class ApplicationTests extends TestCase
             new User('1', 'Existing', 'same@example.com', 'hash', UserRoleEnum::STUDENTE, null)
         );
 
-        $useCase = new RegisterUserUseCase($repository, new class {
-            public function hash(string $password): string
-            {
-                return 'hashed-' . $password;
-            }
-        });
-
+        $useCase = new RegisterUserUseCase($repository);
         $dto = new RegisterUserDTO('2', 'Mario', 'same@example.com', 'secret', UserRoleEnum::STUDENTE, null);
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('User already exists');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Esiste già un utente con questa email.');
         $useCase->execute($dto);
     }
 
@@ -71,38 +65,32 @@ class ApplicationTests extends TestCase
         $repository = $this->createMock(UserRepositoryInterface::class);
         $repository->expects($this->once())->method('findByEmail')->with('mario@example.com')->willReturn(null);
         $repository->expects($this->once())->method('save')->with(
-            $this->callback(fn(User $user) => $user->password_hash === 'hashed-secret')
+            $this->callback(fn(User $user) => password_verify('secret', $user->password_hash))
         )->willReturn(true);
 
-        $useCase = new RegisterUserUseCase($repository, new class {
-            public function hash(string $password): string
-            {
-                return 'hashed-' . $password;
-            }
-        });
-
+        $useCase = new RegisterUserUseCase($repository);
         $dto = new RegisterUserDTO('2', 'Mario Rossi', 'mario@example.com', 'secret', UserRoleEnum::DOCENTE, null);
         $user = $useCase->execute($dto);
 
         $this->assertSame('Mario Rossi', $user->name);
-        $this->assertSame('hashed-secret', $user->password_hash);
+        $this->assertTrue(password_verify('secret', $user->password_hash));
     }
 
     #[Test]
     public function authenticate_accepts_valid_credentials(): void
     {
-        $user = new User('1', 'Mario', 'mario@example.com', 'stored-hash', UserRoleEnum::STUDENTE, '3A');
+        $hash = password_hash('secret', PASSWORD_BCRYPT);
+        $user = new User('1', 'Mario', 'mario@example.com', $hash, UserRoleEnum::STUDENTE, '3A');
         $repository = $this->createMock(UserRepositoryInterface::class);
         $repository->method('findByEmail')->with('mario@example.com')->willReturn($user);
 
-        $useCase = new AuthenticateUserUseCase($repository, new class {
-            public function verify(string $password, string $hash): bool
-            {
-                return $password === 'secret' && $hash === 'stored-hash';
-            }
-        });
+        $session = $this->createMock(SessionManagerInterface::class);
+        $session->expects($this->once())->method('setAuthenticatedUser')->with($user);
 
-        $this->assertSame($user, $useCase->execute('mario@example.com', 'secret'));
+        $useCase = new AuthenticateUserUseCase($repository, $session);
+
+        $dto = new LoginDTO('mario@example.com', 'secret');
+        $this->assertSame($user, $useCase->execute($dto));
     }
 
     #[Test]
@@ -110,16 +98,13 @@ class ApplicationTests extends TestCase
     {
         $repository = $this->createMock(UserRepositoryInterface::class);
         $repository->method('findByEmail')->willReturn(null);
-        $useCase = new AuthenticateUserUseCase($repository, new class {
-            public function verify(string $password, string $hash): bool
-            {
-                return false;
-            }
-        });
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('User not found');
-        $useCase->execute('missing@example.com', 'secret');
+        $session = $this->createMock(SessionManagerInterface::class);
+        $session->expects($this->never())->method('setAuthenticatedUser');
+
+        $useCase = new AuthenticateUserUseCase($repository, $session);
+
+        $this->assertNull($useCase->execute(new LoginDTO('missing@example.com', 'secret')));
     }
 
     #[Test]

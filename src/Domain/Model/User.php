@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace app\Domain\Model;
 
 use app\Domain\Enum\UserRoleEnum;
@@ -13,7 +15,8 @@ class User
         public string $password_hash,
         public UserRoleEnum $role,
         public ?string $user_class
-    ) {}
+    ) {
+    }
 
     public function getPasswordHash(): string
     {
